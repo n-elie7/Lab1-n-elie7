@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Grade Generator - Interactive grade calculation and CSV export tool
+Grade Generator - Interactive grade calculation
 """
 
 def validate_grade(grade_str):
@@ -14,4 +14,17 @@ def validate_grade(grade_str):
             return None
     except ValueError:
         print("Error: Grade must be a valid number.")
+        return None
+
+def validate_weight(weight_str):
+    """Validate weight is a positive number"""
+    try:
+        weight = float(weight_str)
+        if weight > 0:
+            return weight
+        else:
+            print("Error: Weight must be a positive number.")
+            return None
+    except ValueError:
+        print("Error: Weight must be a valid number.")
         return None
