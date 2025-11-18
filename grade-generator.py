@@ -97,11 +97,18 @@ def calculate_final_grade(assignments):
     gpa = (total_grade / 100) * 5.0
     
     # Pass/Fail logic: need >= 50% in both categories
-    formative_pass = formative_total >= (formative_weight_total * 0.5) if formative_weight_total > 0 else True
-    summative_pass = summative_total >= (summative_weight_total * 0.5) if summative_weight_total > 0 else True
+    formative_pass = None
+    summative_pass = None
+    
+    if formative_weight_total > 0:
+        formative_pass = formative_total >= (formative_weight_total * 0.5)
+    if summative_weight_total > 0:
+        summative_pass = summative_total >= (summative_weight_total * 0.5)
+
     status = "PASS" if (formative_pass and summative_pass) else "FAIL"
     
     # Determine assignments to resubmit (grade < 50)
+    # TODO review again not yet finished
     resubmit = [a['name'] for a in assignments if a['grade'] < 50]
     
     return {
@@ -115,38 +122,26 @@ def calculate_final_grade(assignments):
         'resubmit': resubmit
     }
 
-def print_summary(assignments, results):
+def print_summary(results):
     """Print grade summary to console"""
-    print("\n" + "="*60)
-    print(" "*20 + "GRADE SUMMARY")
-    print("="*60)
     
-    print("\nAssignments Entered:")
-    print("-" * 60)
-    for i, a in enumerate(assignments, 1):
-        weighted = (a['grade'] / 100) * a['weight']
-        print(f"{i}. {a['name']}")
-        print(f"   Category: {a['category']} | Grade: {a['grade']:.2f}% | "
-              f"Weight: {a['weight']:.2f} | Weighted: {weighted:.2f}")
+    print("\n" + "-" * 31)
+    print("\n--- RESULTS ---")
+    print(f"Total Formative:  {results['formative_total']:.2f} / {results['formative_weight_total']}")
+    print(f"Total Summative:  {results['summative_total']:.2f} / {results['summative_weight_total']}")
     
-    print("\n" + "-" * 60)
-    print("CATEGORY TOTALS:")
-    print(f"  Formative (FA):  {results['fa_total']:.2f} / {results['fa_weight_total']:.2f}")
-    print(f"  Summative (SA):  {results['sa_total']:.2f} / {results['sa_weight_total']:.2f}")
-    
-    print("\n" + "-" * 60)
-    print(f"FINAL GRADE:       {results['total_grade']:.2f}%")
-    print(f"GPA (out of 5.0):  {results['gpa']:.2f}")
-    print(f"STATUS:            {results['status']}")
+    print("\n" + "-" * 30)
+    print(f"Total Grade:       {results['total_grade']:.2f} / 100")
+    print(f"GPA:               {results['gpa']:.4f}")
+    print(f"Status:            {results['status']}")
     
     if results['resubmit']:
-        print("\nAssignments to Resubmit (Grade < 50%):")
         for assignment in results['resubmit']:
-            print(f"  - {assignment}")
+            print(f"Resubmission:      {assignment}")
     else:
         print("\nNo assignments to resubmit.")
     
-    print("="*60 + "\n")
+    print("\n")
 
 def save_to_csv(assignments, filename='grades.csv'):
     """Save assignments to CSV file"""
@@ -163,7 +158,7 @@ def save_to_csv(assignments, filename='grades.csv'):
                     assignment['weight']
                 ])
         
-        print(f"✓ Data successfully saved to {filename}")
+        print(f"\nData successfully saved to {filename}")
         return True
     except Exception as e:
         print(f"Error saving to CSV: {e}")
@@ -187,7 +182,7 @@ def main():
             assignments.append(assignment)
             print(f"\n✓ Assignment '{assignment['name']}' added successfully!")
         
-        # Ask if user wants to add another
+        # Ask if user wants to add another assignment
         while True:
             choice = input("\nAdd another assignment? (y/n): ").strip().lower()
             if choice in ['y', 'n', 'yes', 'no']:
