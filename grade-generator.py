@@ -37,3 +37,38 @@ def validate_category(category):
     else:
         print("Error: Category must be 'FA' (Formative) or 'SA' (Summative).")
         return None
+
+def get_assignment_details():
+    """Prompt user for assignment details with validation"""
+    print("\n--- Enter Assignment Details ---")
+    
+    # Get assignment name
+    name = input("Assignment Name: ").strip()
+    if not name:
+        print("Error: Assignment name cannot be empty.")
+        return None
+    
+    # Get and validate category (must be FA/SA)
+    category = None
+    while category is None:
+        category_input = input("Category (FA/SA): ").strip()
+        category = validate_category(category_input)
+    
+    # Get and validate grade (must be 0-100 range)
+    grade = None
+    while grade is None:
+        grade_input = input("Grade Obtained (0-100): ").strip()
+        grade = validate_grade(grade_input)
+    
+    # Get and validate weight
+    weight = None
+    while weight is None:
+        weight_input = input("Weight: ").strip()
+        weight = validate_weight(weight_input)
+    
+    return {
+        'name': name,
+        'category': category,
+        'grade': grade,
+        'weight': weight
+    }
