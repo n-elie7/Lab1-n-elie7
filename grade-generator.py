@@ -72,3 +72,42 @@ def get_assignment_details():
         'grade': grade,
         'weight': weight
     }
+
+def calculate_final_grade(assignments):
+    """Calculate weighted grades, totals, GPA, and pass/fail status"""
+    formative_total = 0
+    summative_total = 0
+    formative_weight_total = 0
+    summative_weight_total = 0
+    
+    for assignment in assignments:
+        weighted_grade = (assignment['grade'] / 100) * assignment['weight']
+        
+        if assignment['category'] == 'FA':
+            formative_total += weighted_grade
+            formative_weight_total += assignment['weight']
+        else:  # SA
+            summative_total += weighted_grade
+            summative_weight_total += assignment['weight']
+    
+    total_grade = formative_total + summative_total
+    gpa = (total_grade / 100) * 5.0
+    
+    # Pass/Fail logic: need >= 50% in both categories
+    formative_pass = formative_total >= (formative_weight_total * 0.5) if formative_weight_total > 0 else True
+    summative_pass = summative_total >= (summative_weight_total * 0.5) if summative_weight_total > 0 else True
+    status = "PASS" if (formative_pass and summative_pass) else "FAIL"
+    
+    # Determine assignments to resubmit (grade < 50)
+    resubmit = [a['name'] for a in assignments if a['grade'] < 50]
+    
+    return {
+        'formative_total': formative_total,
+        'summative_total': summative_total,
+        'formative_weight_total': formative_weight_total,
+        'summative_weight_total': summative_weight_total,
+        'total_grade': total_grade,
+        'gpa': gpa,
+        'status': status,
+        'resubmit': resubmit
+    }
