@@ -1,6 +1,7 @@
 #!/bin/bash
+# organizer.sh file Archive CSV files with timestamps and logging
 
-# Define directories and files
+# Define directory and log file
 ARCHIVE_DIR="archive"
 LOG_FILE="organizer.log"
 
@@ -57,6 +58,8 @@ for csv_file in "${csv_files[@]}"; do
     
     # Create new filename with timestamp
     new_filename="${filename}-${timestamp}.csv"
+
+    # Create new path for new_filename
     new_filepath="${ARCHIVE_DIR}/${new_filename}"
     
     echo "Processing: $csv_file"
@@ -78,9 +81,10 @@ for csv_file in "${csv_files[@]}"; do
         echo ""
     } >> "$LOG_FILE"
     
-    # Move and rename the file
+    # Move the new_filename
     mv "$csv_file" "$new_filepath"
     
+    # Check if previous command was successful
     if [ $? -eq 0 ]; then
         echo "Successfully archived as: $new_filename"
         ((csv_count++))

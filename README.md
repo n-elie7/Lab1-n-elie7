@@ -17,7 +17,7 @@ This project includes:
 - Weighted grade calculations
 - Formative (FA) and Summative (SA) category tracking
 - GPA calculation (0-5.0 scale)
-- Pass/Fail determination based on 50% threshold in both categories
+- PASS/FAIL determination based on 50% threshold in both categories
 - Identification of assignments requiring resubmission (grade < 50%)
 - Console summary output
 - CSV file export
@@ -59,7 +59,7 @@ Category (FA/SA): FA
 Grade Obtained (0-100): 19
 Weight: 30
 
-✓ Assignment 'Group Coding Lab' added successfully!
+Assignment 'Group Coding Lab' added successfully!
 
 Add another assignment? (y/n): y
 
@@ -69,7 +69,7 @@ Category (FA/SA): FA
 Grade Obtained (0-100): 56
 Weight: 10
 
-✓ Assignment 'Discussion Forum' added successfully!
+Assignment 'Discussion Forum' added successfully!
 
 Add another assignment? (y/n): n
 ```
@@ -100,6 +100,7 @@ Individual Lab,SA,81,25
 
 ```bash
 chmod +x organizer.sh
+
 ./organizer.sh
 ```
 
@@ -153,8 +154,8 @@ The `organizer.log` file contains:
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd <repository-name>
+git clone https://github.com/n-elie7/Lab1-n-elie7
+cd Lab1-n-elie7
 ```
 
 2. Make the organizer script executable:
@@ -186,7 +187,7 @@ Enter the following assignments:
 **Expected Results:**
 - FA Total: 28.50 / 60
 - SA Total: 27.00 / 40
-- Final Grade: 55.50%
+- Final Grade: 55.50 / 100
 - GPA: 2.78
 - Status: PASS (both categories ≥50%)
 
