@@ -3,6 +3,9 @@
 Grade Generator - Interactive grade calculation
 """
 
+import csv
+import sys
+
 def validate_grade(grade):
     """Validate grade is a number between 0 and 100"""
     try:
@@ -111,3 +114,102 @@ def calculate_final_grade(assignments):
         'status': status,
         'resubmit': resubmit
     }
+
+def print_summary(assignments, results):
+    """Print grade summary to console"""
+    print("\n" + "="*60)
+    print(" "*20 + "GRADE SUMMARY")
+    print("="*60)
+    
+    print("\nAssignments Entered:")
+    print("-" * 60)
+    for i, a in enumerate(assignments, 1):
+        weighted = (a['grade'] / 100) * a['weight']
+        print(f"{i}. {a['name']}")
+        print(f"   Category: {a['category']} | Grade: {a['grade']:.2f}% | "
+              f"Weight: {a['weight']:.2f} | Weighted: {weighted:.2f}")
+    
+    print("\n" + "-" * 60)
+    print("CATEGORY TOTALS:")
+    print(f"  Formative (FA):  {results['fa_total']:.2f} / {results['fa_weight_total']:.2f}")
+    print(f"  Summative (SA):  {results['sa_total']:.2f} / {results['sa_weight_total']:.2f}")
+    
+    print("\n" + "-" * 60)
+    print(f"FINAL GRADE:       {results['total_grade']:.2f}%")
+    print(f"GPA (out of 5.0):  {results['gpa']:.2f}")
+    print(f"STATUS:            {results['status']}")
+    
+    if results['resubmit']:
+        print("\nAssignments to Resubmit (Grade < 50%):")
+        for assignment in results['resubmit']:
+            print(f"  - {assignment}")
+    else:
+        print("\nNo assignments to resubmit.")
+    
+    print("="*60 + "\n")
+
+def save_to_csv(assignments, filename='grades.csv'):
+    """Save assignments to CSV file"""
+    try:
+        with open(filename, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(['Assignment', 'Category', 'Grade', 'Weight'])
+            
+            for assignment in assignments:
+                writer.writerow([
+                    assignment['name'],
+                    assignment['category'],
+                    assignment['grade'],
+                    assignment['weight']
+                ])
+        
+        print(f"✓ Data successfully saved to {filename}")
+        return True
+    except Exception as e:
+        print(f"Error saving to CSV: {e}")
+        return False
+
+
+def main():
+    """Main program loop"""
+    print("="*60)
+    print(" "*15 + "GRADE GENERATOR")
+    print("="*60)
+    print("\nThis tool will help you calculate your final grade.")
+    print("You can enter multiple assignments with their details.\n")
+    
+    assignments = []
+    
+    while True:
+        assignment = get_assignment_details()
+        
+        if assignment:
+            assignments.append(assignment)
+            print(f"\n✓ Assignment '{assignment['name']}' added successfully!")
+        
+        # Ask if user wants to add another
+        while True:
+            choice = input("\nAdd another assignment? (y/n): ").strip().lower()
+            if choice in ['y', 'n', 'yes', 'no']:
+                break
+            print("Please enter 'y' or 'n'.")
+        
+        if choice in ['n', 'no']:
+            break
+    
+    if not assignments:
+        print("\nNo assignments entered. Exiting.")
+        sys.exit(0)
+    
+    # Calculate results
+    results = calculate_final_grade(assignments)
+    
+    # Print summary
+    print_summary(assignments, results)
+    
+    # Save to CSV
+    save_to_csv(assignments)
+
+
+if __name__ == "__main__":
+    main()
