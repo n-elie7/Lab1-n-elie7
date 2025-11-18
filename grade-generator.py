@@ -44,9 +44,9 @@ def get_assignment_details():
     
     # Get assignment name
     name = input("Assignment Name: ").strip()
-    if not name:
+    while not name:
         print("Error: Assignment name cannot be empty.")
-        return None
+        name = input("\nAssignment Name: ").strip()
     
     # Get and validate category (must be FA/SA)
     category = None
