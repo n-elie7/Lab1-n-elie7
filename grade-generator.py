@@ -11,12 +11,12 @@ def validate_grade(grade):
     try:
         grade = float(grade)
         if 0 <= grade <= 100:
-            return grade
+            return int(grade)
         else:
-            print("Error: Grade must be between 0 and 100.")
+            print("Oops: Grade must be between 0 and 100.")
             return None
     except ValueError:
-        print("Error: Grade must be a valid number.")
+        print("Oops: Grade must be a valid number.")
         return None
 
 def validate_weight(weight):
@@ -24,12 +24,12 @@ def validate_weight(weight):
     try:
         weight = float(weight)
         if weight > 0:
-            return weight
+            return int(weight)
         else:
-            print("Error: Weight must be a positive number.")
+            print("Oops: Weight must be a positive number.")
             return None
     except ValueError:
-        print("Error: Weight must be a valid number.")
+        print("Oops: Weight must be a valid number.")
         return None
 
 def validate_category(category):
@@ -38,7 +38,7 @@ def validate_category(category):
     if category in ['FA', 'SA']:
         return category
     else:
-        print("Error: Category must be 'FA' (Formative) or 'SA' (Summative).")
+        print("Oops: Category must be 'FA' (Formative) or 'SA' (Summative).")
         return None
 
 def get_assignment_details():
@@ -48,7 +48,7 @@ def get_assignment_details():
     # Get assignment name
     name = input("Assignment Name: ").strip()
     while not name:
-        print("Error: Assignment name cannot be empty.")
+        print("Oops: Assignment name cannot be empty.")
         name = input("\nAssignment Name: ").strip()
     
     # Get and validate category (must be FA/SA)
@@ -127,9 +127,10 @@ def print_summary(results):
     
     print("\n" + "-" * 31)
     print("\n--- RESULTS ---")
-    print(f"Total Formative:  {results['formative_total']:.2f} / {results['formative_weight_total']}")
-    print(f"Total Summative:  {results['summative_total']:.2f} / {results['summative_weight_total']}")
+    print(f"Total Formative:  {results['formative_total']:.2f} / {int(results['formative_weight_total'])}")
+    print(f"Total Summative:  {results['summative_total']:.2f} / {int(results['summative_weight_total'])}")
     
+
     print("\n" + "-" * 30)
     print(f"Total Grade:       {results['total_grade']:.2f} / 100")
     print(f"GPA:               {results['gpa']:.4f}")
@@ -158,7 +159,6 @@ def save_to_csv(assignments, filename='grades.csv'):
                     assignment['weight']
                 ])
         
-        print(f"\nData successfully saved to {filename}")
         return True
     except Exception as e:
         print(f"Error saving to CSV: {e}")
@@ -168,7 +168,7 @@ def save_to_csv(assignments, filename='grades.csv'):
 def main():
     """Main program loop"""
     print("="*60)
-    print(" "*15 + "GRADE GENERATOR")
+    print(" "*15 + "GRADE GENERATOR CALCULATOR")
     print("="*60)
     print("\nThis tool will help you calculate your final grade.")
     print("You can enter multiple assignments with their details.\n")
@@ -180,7 +180,7 @@ def main():
         
         if assignment:
             assignments.append(assignment)
-            print(f"\n✓ Assignment '{assignment['name']}' added successfully!")
+            print(f"\nAssignment '{assignment['name']}' added successfully!")
         
         # Ask if user wants to add another assignment
         while True:
@@ -200,7 +200,7 @@ def main():
     results = calculate_final_grade(assignments)
     
     # Print summary
-    print_summary(assignments, results)
+    print_summary(results)
     
     # Save to CSV
     save_to_csv(assignments)
