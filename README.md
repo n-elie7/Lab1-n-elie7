@@ -18,7 +18,7 @@ This project includes:
 - Formative (FA) and Summative (SA) category tracking
 - GPA calculation (0-5.0 scale)
 - PASS/FAIL determination based on 50% threshold in both categories
-- Identification of assignments requiring resubmission (grade < 50%)
+- Identification of assignments requiring resubmission
 - Console summary output
 - CSV file export
 
